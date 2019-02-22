@@ -1,0 +1,364 @@
+//Class
+
+	static String nodePath = "C:\\Program Files\\nodejs\\node.exe";
+	static String appiumMainJsPath = "C:\\program Files (x86)\\Appium\\resources\\app\\node_modules\\appium\\build\\lib\\main.js";
+	static int portNo = 4723;
+	static AndroidDriver<MobileElement> driver = null;
+
+	public void LogIn() {
+		MobileElement username = driver.findElement(MobileBy.AccessibilityId("username"));
+		username.clear();
+		username.sendKeys("admin");
+
+		MobileElement password = driver.findElement(MobileBy.AccessibilityId("password"));
+		password.clear();
+		password.sendKeys("admin");
+
+		MobileElement login = driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"LOG IN\")"));
+		login.click();
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Native View\")")).isDisplayed();
+
+		System.out.println("********************Successfully Logged in***************************");
+	}
+
+	public void NativeView() {
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Native View\")")).click();
+
+		String text = driver.findElement(MobileBy.AccessibilityId("textView")).getText();
+		System.out.println("Text is : " + text);
+
+		driver.findElement(MobileBy.AccessibilityId("textView")).isDisplayed();
+
+		System.out.println("***************Successfully Done Native View********************************");
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Back\")")).click();
+	}
+
+	public void Slider() {
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Slider\")")).click();
+
+//		driver.findElement(MobileBy.AccessibilityId("slider")).click();
+
+		driver.findElement(MobileBy.AccessibilityId("slider")).isDisplayed();
+
+		driver.findElement(MobileBy.AccessibilityId("slider")).sendKeys("64");
+
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(
+				ExpectedConditions.elementToBeClickable(MobileBy.AndroidUIAutomator("new UiSelector().text(\"50\")")));
+
+		String element = driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"50\")")).getText();
+		System.out.println(element);
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"50\")")).isDisplayed();
+
+		System.out.println("************************Slider***********************");
+
+		MobileElement Back = (MobileElement) wait.until(ExpectedConditions
+				.elementToBeClickable(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Back\")")));
+		Back.click();
+	}
+
+	public void VerticalSwiping() throws InterruptedException {
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Vertical swiping\")")).click();
+
+		PointOption p1 = new PointOption();
+
+		TouchAction ta = new TouchAction(driver);
+
+		Dimension size = driver.manage().window().getSize();
+
+		int anchor = (int) (size.width * 0.50);
+
+		int startPoint = (int) (size.height * 0.90);
+
+		int endPoint = (int) (size.height * 0.10);
+
+		ta.press(PointOption.point(anchor, startPoint)).waitAction().moveTo(PointOption.point(anchor, endPoint))
+				.release().perform();
+
+		Thread.sleep(2000);
+
+		System.out.println("************************Vertical swiping***********************");
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Back\")")).click();
+
+	}
+
+	public void DragDrop() {
+		
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		
+		wait.until(ExpectedConditions
+				.visibilityOf(driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Drag & Drop\")")))).click();
+
+		PointOption p1 = new PointOption();
+
+		TouchAction ta = new TouchAction(driver);
+
+		Dimension size = driver.manage().window().getSize();
+
+		int anchor = (int) (size.width * 0.50);
+
+		int startPoint = (int) (size.height * 0.60);
+
+		int endPoint = (int) (size.height * 0.20);
+
+		ta.press(PointOption.point(anchor, startPoint)).waitAction().moveTo(PointOption.point(anchor, endPoint))
+				.release().perform();
+
+//		ta.press(p1.point(530, 1350)).waitAction().moveTo(p1.point(540, 340)).release().perform();
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Circle dropped\")")).isDisplayed();
+
+		System.out.println("************************Drag & Drop***********************");
+
+		
+
+		wait.until(ExpectedConditions
+				.visibilityOf(driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Back\")"))))
+				.click();
+
+	}
+
+	public void DoubleTap() {
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Double Tap\")")).click();
+
+		PointOption p1 = new PointOption();
+
+		TouchAction ta = new TouchAction(driver);
+
+		Dimension size = driver.manage().window().getSize();
+
+		int mid1 = (int) (size.width * 0.50);
+
+		int mid2 = (int) (size.height * 0.50);
+
+		ta.press(PointOption.point(mid1, mid2)).release().perform().press(PointOption.point(mid1, mid2)).release()
+				.perform();
+
+		/*
+		 * new TouchAction(driver).press(p1.point(542,
+		 * 1058)).release().perform().press(p1.point(542, 1058)).release() .perform();
+		 */
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Double tap successful!\")"))
+				.isDisplayed();
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"OK\")")).click();
+
+		System.out.println("************************doubleTap***********************");
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Back\")")).click();
+	}
+
+	public void LongPress() throws InterruptedException {
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Long Press\")")).click();
+
+		PointOption p1 = new PointOption();
+
+		TouchAction ta = new TouchAction(driver);
+
+		Dimension size = driver.manage().window().getSize();
+
+		int mid1 = (int) (size.width * 0.50);
+
+		int mid2 = (int) (size.height * 0.70);
+
+		ta.press(PointOption.point(mid1, mid2)).waitAction().release().perform();
+
+		// new TouchAction(driver).press(p1.point(536,
+		// 1517)).waitAction().release().perform();
+
+		
+		Thread.sleep(2000);
+		driver.findElement(MobileBy.id("android:id/message")).isDisplayed();
+		
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"OK\")")).click();
+
+		
+		
+
+		System.out.println("************************Long Press***********************");
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Back\")")).click();
+
+	}
+
+	public void PhotoView() {
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Photo View\")")).click();
+
+//		WebElement ele_image = driver.findElementByClassName("android.widget.ImageView");
+
+		PointOption p1 = new PointOption();
+
+		TouchAction ta = new TouchAction(driver);
+
+		Dimension size = driver.manage().window().getSize();
+
+		int mid1 = (int) (size.width * 0.50);
+
+		int mid2 = (int) (size.height * 0.50);
+
+		ta.press(PointOption.point(mid1, mid2)).release().perform().press(PointOption.point(mid1, mid2)).release()
+				.perform();
+
+		System.out.println("************************Zoom View***********************");
+
+		ta.press(PointOption.point(mid1, mid2)).release().perform().press(PointOption.point(mid1, mid2)).release()
+				.perform();
+
+		ta.press(PointOption.point(mid1, mid2)).release().perform().press(PointOption.point(mid1, mid2)).release()
+				.perform();
+
+		System.out.println("************************Pinch View***********************");
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Back\")")).click();
+	}
+
+	public void WebView() throws InterruptedException {
+
+		PointOption p1 = new PointOption();
+
+		TouchAction ta = new TouchAction(driver);
+
+		Dimension size = driver.manage().window().getSize();
+
+		int anchor = (int) (size.width * 0.50);
+
+		int startPoint = (int) (size.height * 0.80);
+
+		int endPoint = (int) (size.height * 0.20);
+
+		ta.press(PointOption.point(anchor, startPoint)).waitAction().moveTo(PointOption.point(anchor, endPoint))
+				.release().perform();
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Web View\")")).click();
+
+		Thread.sleep(10000);
+		MobileElement ele = driver
+				.findElement(MobileBy.xpath("//android.view.View[@text='1.']/parent::android.view.View"));
+
+		WebDriverWait wait = new WebDriverWait(driver, 20);
+
+		wait.until(ExpectedConditions.elementToBeClickable(ele)).click();
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Webview\")")).isDisplayed();
+
+		Thread.sleep(3000);
+
+		System.out.println("************************webView***********************");
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Back\")")).click();
+
+	}
+
+	public void Carousel() {
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Carousel\")")).click();
+
+		Dimension size = driver.manage().window().getSize();
+
+		int anchor = (int) (size.height * 0.50);
+
+		int startPoint = (int) (size.width * 0.10);
+
+		int endPoint = (int) (size.width * 0.90);
+
+		PointOption p1 = new PointOption();
+
+		TouchAction ta = new TouchAction(driver);
+
+		new TouchAction(driver).press(PointOption.point(startPoint, anchor)).waitAction()
+				.moveTo(PointOption.point(endPoint, anchor)).release().perform();
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().textContains(\"3\")")).isDisplayed();
+
+		System.out.println("************************Carousel***********************");
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Back\")")).click();
+
+	}
+
+	public void WheelPicker() {
+
+		Dimension size = driver.manage().window().getSize();
+
+		int anchor = (int) (size.width * 0.50);
+
+		int startPoint = (int) (size.height * 0.90);
+
+		int endPoint = (int) (size.height * 0.10);
+
+		TouchAction ta = new TouchAction(driver);
+
+		PointOption p1 = new PointOption();
+
+		ta.press(PointOption.point(anchor, startPoint)).waitAction().moveTo(PointOption.point(anchor, endPoint))
+				.release().perform();
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Wheel Picker\")")).click();
+
+		driver.findElement(By.className("android.widget.Spinner")).click();
+
+		MobileElement element6 = driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"blue\")"));
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+
+		wait.until(ExpectedConditions.visibilityOf(element6)).click();
+
+		element6.isDisplayed();
+
+		System.out.println("************************Wheel Picker***********************");
+
+		driver.findElement(MobileBy.AndroidUIAutomator("new UiSelector().text(\"Back\")")).click();
+
+	}
+
+	public void close() {
+
+		((AppiumDriver) driver).closeApp();
+
+		System.err
+				.println("************************All the activities are over Closing App now***********************");
+	}
+
+	public static void main(String[] args) throws MalformedURLException, InterruptedException {
+
+
+		// capabilities
+
+		DesiredCapabilities capabilities = new DesiredCapabilities();
+		capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
+		capabilities.setCapability("udid", "d6210334");
+		capabilities.setCapability("deviceName", "POCO F1");
+		capabilities.setCapability("platformVersion", "8.1.0");
+		capabilities.setCapability("platformName", "Android");
+
+		// capabilities for apk
+
+		capabilities.setCapability("appPackage", "com.vodqareactnative");
+		capabilities.setCapability("appActivity", "com.vodqareactnative.MainActivity");
+		capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
+
+		driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+
+		assessment x = new assessment();
+		x.LogIn();
+//
+		x.NativeView();
+		x.Slider();
+		x.DragDrop();
+		x.DoubleTap();
+		x.LongPress();
+		x.PhotoView();
+		x.VerticalSwiping();
+		x.WheelPicker();
+		x.Carousel();
+
+		x.WebView();
+		x.close();
+
+	}
+
